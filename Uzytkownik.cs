@@ -52,5 +52,15 @@ namespace io_projekt_cs
             islogged = true;
             return true;
         }
+
+        public void wyswietl_ogloszenia(Baza_danych b)
+        {
+            for (int i = 1; i <= b.size_usera(); i++)
+            {
+                Console.Write(++i + ". ");
+                --i;
+                Console.WriteLine("id [{0}], marka [{1}], model [{2}], rok [{3}], przebieg [{4}km], cena [{5}zl]", i, b.get_marka(i), b.get_model(i), b.get_rok(i), b.get_przebieg(i), b.get_cena(i));
+            }
+        }
     }
 }

@@ -8,6 +8,13 @@ namespace io_projekt_cs
 {
     public class Produkt
     {
+        public int id;
+        public int cena;
+        public int rodzaj;
 
+        public void dodajzdjecie()
+        {
+            
+        }
     }
 }

@@ -31,6 +31,8 @@ namespace io_projekt_cs
                 if (klucz == 3)
                 {
                     klucz=sys.mojekonto();
+                    if (klucz == 5)
+                        klucz = sys.wyswiel_ogloszenia(b);
                 }
                 if (klucz == 4)
                 {

@@ -39,12 +39,21 @@ namespace io_projekt_cs
             Console.WriteLine("-------------");
             Console.WriteLine("Aby wrocic kliknij 0");
             Console.WriteLine("Aby dodac ogloszenia kliknij 98");
-            Console.WriteLine("Aby dodac ogloszenie do koszyka wcisnij 99");
+            Console.WriteLine("Aby dodac ogloszenie do koszyka wcisnij numer ogloszenia");
 
             int klucz = Convert.ToInt32(Console.ReadLine());
+            
             if(klucz==98)
             {
-
+                Ogloszenie ogl = new Ogloszenie(b);
+                ogl.dodaj(b);
+                Console.WriteLine("Twoje ogłoszenie dodano poprawnie");
+                Console.ReadKey();
+                klucz = 0;
+            }
+            else if(klucz!=0 && klucz!=1)
+            {
+                //dodawanie do koszyka
             }
             return klucz;
         }
@@ -61,6 +70,7 @@ namespace io_projekt_cs
                 Console.WriteLine("3. Moje konto");
                 Console.WriteLine("4. Koszyk");
                 Console.WriteLine("-------------");
+                Console.WriteLine("5. Wyswietl swoje ogloszenia");
                 int klucz = Convert.ToInt32(Console.ReadLine());
                 return klucz;
             }
@@ -133,6 +143,20 @@ namespace io_projekt_cs
             {
                 Console.WriteLine("Niezalogowano");
             }
+            Console.WriteLine("Aby wrocic kliknij 1");
+            int klucz = Convert.ToInt32(Console.ReadLine());
+            return klucz;
+        }
+        public int wyswiel_ogloszenia(Baza_danych b)
+        {
+            for (int i = 1; i <= b.size_usera(); i++)
+            {
+                int k = i + 1;
+                Console.Write(k + ". ");
+                int[] idd = b.get_id_us(b.size_usera());
+                Console.WriteLine("id [{0}], marka [{1}], model [{2}], rok [{3}], przebieg [{4}km], cena [{5}zl]", idd, b.get_marka_us(idd[--i]), b.get_model_us(idd[--i]), b.get_rok_us(idd[0]), b.get_przebieg_us(idd[0]), b.get_cena_us(idd[0]));
+            }
+            Console.WriteLine("--------------------");
             Console.WriteLine("Aby wrocic kliknij 1");
             int klucz = Convert.ToInt32(Console.ReadLine());
             return klucz;
