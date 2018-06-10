@@ -9,7 +9,7 @@ namespace io_projekt_cs
 {
     public class Baza_danych
     {
-
+        //polaczenie
         MySqlConnection polaczenie =  new MySqlConnection("server=sql.twp.home.pl; user=00092481_marek; password=haju04-pogon; database=00092481_marek;");
         MySqlCommand command;
         MySqlDataReader reader;
