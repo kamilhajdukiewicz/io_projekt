@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace io_projekt_cs
 {
-    public class Baza_danych
+    public class Baza_danych : Singleton
     {
         //polaczenie
         MySqlConnection polaczenie =  new MySqlConnection("server=sql.twp.home.pl; user=00092481_marek; password=haju04-pogon; database=00092481_marek;");
@@ -42,6 +42,21 @@ namespace io_projekt_cs
         {
             polaczenie.Open();
             select = "SELECT id FROM oferty_usera";
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+            int i = 0;
+            while (reader.Read())
+            {
+                i++;
+            }
+            polaczenie.Close();
+            return i;
+        }
+
+        public int size_koszyk()
+        {
+            polaczenie.Open();
+            select = "SELECT id FROM Koszyk";
             command = new MySqlCommand(select, polaczenie);
             reader = command.ExecuteReader();
             int i = 0;
@@ -233,5 +248,107 @@ namespace io_projekt_cs
 
         }
 
+        public void dodaj_do_koszyka(int id, string marka, string model, int rok, int przebieg, int cena)
+        {
+            polaczenie.Open();
+            select = "INSERT INTO `00092481_marek`.`Koszyk` (`id`, `marka`, `model`, `rok`, `przebieg`, `cena`) VALUES('" + id + "', '" + marka + "', '" + model + "', '" + rok + "', '" + przebieg + "', '" + cena + "'); ";
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+            polaczenie.Close();
+        }
+        public int get_cena_koszyk(int id)
+        {
+            polaczenie.Open();
+            select = "SELECT cena FROM Koszyk WHERE id=" + id.ToString();
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+            reader.Read();
+            int str = Convert.ToInt32(reader[0]);
+            polaczenie.Close();
+            return str;
+
+        }
+        public string get_marka_ko(int id)
+        {
+            polaczenie.Open();
+            select = "SELECT marka FROM Koszyk WHERE id=" + id.ToString();
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+
+            reader.Read();
+            string str = reader[0].ToString();
+            polaczenie.Close();
+            return str;
+        }
+
+        public string get_model_ko(int id)
+        {
+            polaczenie.Open();
+            select = "SELECT model FROM Koszyk WHERE id=" + id.ToString();
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+
+            reader.Read();
+            string str = reader[0].ToString();
+            polaczenie.Close();
+            return str;
+        }
+
+        public int get_rok_ko(int id)
+        {
+            polaczenie.Open();
+            select = "SELECT rok FROM Koszyk WHERE id=" + id.ToString();
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+
+            reader.Read();
+            int str = Convert.ToInt32(reader[0]);
+            polaczenie.Close();
+            return str;
+        }
+
+        public int get_przebieg_ko(int id)
+        {
+            polaczenie.Open();
+            select = "SELECT przebieg FROM Koszyk WHERE id=" + id.ToString();
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+
+            reader.Read();
+            int str = Convert.ToInt32(reader[0]);
+            polaczenie.Close();
+            return str;
+        }
+
+        public int get_cena_ko(int id)
+        {
+            polaczenie.Open();
+            select = "SELECT cena FROM Koszyk WHERE id=" + id.ToString();
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+
+            reader.Read();
+            int str = Convert.ToInt32(reader[0]);
+            polaczenie.Close();
+            return str;
+
+        }
+        public void usun()
+        {
+            polaczenie.Open();
+            select = "DELETE FROM Koszyk";
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+            polaczenie.Close();
+
+        }
+        public void usun_wybrane(int id)
+        {
+            polaczenie.Open();
+            select = "DELETE FROM Koszyk WHERE id="+id.ToString();
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+            polaczenie.Close();
+        }
     }
 }

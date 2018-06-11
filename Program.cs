@@ -37,6 +37,10 @@ namespace io_projekt_cs
                 if (klucz == 4)
                 {
                     klucz=sys.koszyk();
+                    if (klucz == 5)
+                    {
+                        klucz = sys.wyswietl_koszyk(b);
+                    }
                 }
             }
 

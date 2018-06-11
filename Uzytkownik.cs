@@ -8,6 +8,7 @@ namespace io_projekt_cs
 {
     public class Uzytkownik
     {
+        public Koszyk kosz = new Koszyk();
         public string imie;
         public string nazwisko;
         public int nr;
