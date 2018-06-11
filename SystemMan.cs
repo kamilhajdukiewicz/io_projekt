@@ -92,7 +92,17 @@ namespace io_projekt_cs
                 Console.WriteLine("4. Koszyk");
                 Console.WriteLine("-------------");
                 Console.WriteLine("5. Wyswietl swoje ogloszenia");
+                Console.WriteLine("6. Pokaz moje dane");
+                Console.WriteLine("7. Zmien dane");
                 int klucz = Convert.ToInt32(Console.ReadLine());
+                if(klucz==6)
+                {
+                    klucz=user.pokaz_dane();
+                }
+                else if(klucz==7)
+                {
+                    klucz = user.zmiendane();
+                }
                 return klucz;
             }
             else

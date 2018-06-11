@@ -342,7 +342,7 @@ namespace io_projekt_cs
             polaczenie.Close();
 
         }
-        public void usun_wybrane(int id)
+        public void usun_wybrane(int id)    
         {
             polaczenie.Open();
             select = "DELETE FROM Koszyk WHERE id="+id.ToString();

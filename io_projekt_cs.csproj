@@ -62,7 +62,10 @@
     <Compile Include="Auto.cs" />
     <Compile Include="Baza_danych.cs" />
     <Compile Include="Czesc.cs" />
+    <Compile Include="Dane_Klienta.cs" />
     <Compile Include="Koszyk.cs" />
+    <Compile Include="Lista_produktow.cs" />
+    <Compile Include="Lista_zakupow.cs" />
     <Compile Include="Ogloszenie.cs" />
     <Compile Include="Produkt.cs" />
     <Compile Include="Program.cs" />

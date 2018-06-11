@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace io_projekt_cs
 {
-    public class Koszyk
+    public class Koszyk : Lista_zakupow
     {
         public int koszt;
         public int ceny=0;
         public int prowizja;
         public int ilosc;
-        public List<int> id_pr=new List<int>();
+      
         public Koszyk()
         {
 
@@ -20,9 +20,12 @@ namespace io_projekt_cs
         public int oblicz_koszt(Baza_danych b)
         {
             ilosc = id_pr.Count;
-            for(int i=0;i<ilosc;i++)
+            if(ilosc==1)
+                ceny = ceny=b.get_cena_koszyk(id_pr[0]);
+            else
             {
-                ceny=ceny+b.get_cena_koszyk(id_pr[i]);
+                for (int i = 0; i < ilosc; i++)
+                    ceny = ceny + b.get_cena_koszyk(id_pr[i]);
             }
             return ceny;
         }
