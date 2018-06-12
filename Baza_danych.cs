@@ -7,26 +7,50 @@ using MySql.Data.MySqlClient;
 
 namespace io_projekt_cs
 {
-    public class Baza_danych : Singleton
+    public class Baza_danych
     {
         //polaczenie
-        MySqlConnection polaczenie =  new MySqlConnection("server=sql.twp.home.pl; user=00092481_marek; password=haju04-pogon; database=00092481_marek;");
+        MySqlConnection polaczenie = new MySqlConnection("server=sql.twp.home.pl; user=00092481_marek; password=haju04-pogon; database=00092481_marek;");
         MySqlCommand command;
         MySqlDataReader reader;
         string select = "";
 
-        //public void polacz()
-        //{
+        private static Baza_danych _oobiekt;
 
-        //    if (polaczenie.State == System.Data.ConnectionState.Open)
-               
-        //    else
-        //        polaczenie.Close();
-        //}
+        //kontruktor musi byc prywatny lub protected
+        //aby uniemożliwić utworzenie obiektu
+        //za pomocą operatora new
+        protected Baza_danych() { }
+
+        //publiczna metoda statyczna za pomocą której
+        //otzymamy referencję do obiektu
+        public static Baza_danych utworzObiekt()
+        {
+            //sprawdzamy czy już utworzyliśmy instancję klasy
+            if (_oobiekt == null)
+            {
+                //jeśli nie to ją tworzymy
+                _oobiekt = new Baza_danych();
+            }
+            //zwracamy instancję obiektu zapisanego
+            //w stacznym polu naszej klasy
+            return _oobiekt;
+        }
+
+        public void nowy_user(string email, string haslo)
+        {
+            if (polaczenie.State == System.Data.ConnectionState.Closed)
+                polaczenie.Open();
+            select = "INSERT INTO `00092481_marek`.`user` (`email`, `haslo`) VALUES('" + email + "', '" + haslo + "'); ";
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+            polaczenie.Close();
+        }
 
         public int size()
         {
-            polaczenie.Open();
+            if(polaczenie.State==System.Data.ConnectionState.Closed)
+                polaczenie.Open();
             select = "SELECT id FROM Oferty";
             command = new MySqlCommand(select, polaczenie);
             reader = command.ExecuteReader();
@@ -74,7 +98,7 @@ namespace io_projekt_cs
             command = new MySqlCommand(select, polaczenie);
             reader = command.ExecuteReader();
             int i = 0;
-            int[] str=new int[size];
+            int[] str = new int[size];
             while (reader.Read())
             {
                 str[i] = Convert.ToInt32(reader[i]);
@@ -87,7 +111,7 @@ namespace io_projekt_cs
         public string get_marka(int id)
         {
             polaczenie.Open();
-            select = "SELECT marka FROM Oferty WHERE id="+id.ToString();
+            select = "SELECT marka FROM Oferty WHERE id=" + id.ToString();
             command = new MySqlCommand(select, polaczenie);
             reader = command.ExecuteReader();
 
@@ -345,10 +369,94 @@ namespace io_projekt_cs
         public void usun_wybrane(int id)
         {
             polaczenie.Open();
-            select = "DELETE FROM Koszyk WHERE id="+id.ToString();
+            select = "DELETE FROM Koszyk WHERE id=" + id.ToString();
             command = new MySqlCommand(select, polaczenie);
             reader = command.ExecuteReader();
             polaczenie.Close();
+        }
+
+        public int get_id_ce(int cena)
+        {
+
+            polaczenie.Open();
+            select = "SELECT id FROM Oferty WHERE cena=" + cena.ToString();
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+
+            reader.Read();
+            int str = Convert.ToInt32(reader[0]);
+            polaczenie.Close();
+            return str;
+        }
+        public void sortuj_wzgledem_ceny()
+        {
+            int leg = size();
+            Console.Clear();
+            polaczenie.Open();
+            select = "SELECT * FROM Oferty ORDER BY cena";
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                Console.Write("id [{0}] ", reader["id"].ToString());
+                Console.Write(" marka [{0}] ", reader["marka"].ToString());
+                Console.Write(" model [{0}] ", reader["model"].ToString());
+                Console.Write(" rocznik [{0}] ", reader["rok"].ToString());
+                Console.Write(" przebieg [{0}] ", reader["przebieg"].ToString());
+                Console.Write(" cena [{0}] ", reader["cena"].ToString());
+                Console.WriteLine("");
+
+            }
+            polaczenie.Close();
+        }
+        public void szukaj(string name)
+        {
+            Console.Clear();
+            polaczenie.Open();
+            select = "SELECT * FROM Oferty WHERE marka LIKE " + "\"" + name + "\"";
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+            int i = 0;
+            while (reader.Read())
+            {
+                Console.Write("id [{0}] ", reader["id"].ToString());
+                Console.Write(" marka [{0}] ", reader["marka"].ToString());
+                Console.Write(" model [{0}] ", reader["model"].ToString());
+                Console.Write(" rocznik [{0}] ", reader["rok"].ToString());
+                Console.Write(" przebieg [{0}] ", reader["przebieg"].ToString());
+                Console.Write(" cena [{0}] ", reader["cena"].ToString());
+                Console.WriteLine("");
+                i++;
+            }
+            if(i==0)
+            {
+                Console.Clear();
+                Console.WriteLine("W bazie nie ma takiego auta!");
+                Console.ReadKey();
+            }
+            polaczenie.Close();
+            Console.ReadKey();
+        }
+
+        public bool czy_zalogowano(string em,string has)
+        {
+            polaczenie.Open();
+            select = "SELECT haslo FROM user WHERE email LIKE " + "\"" + em+ "\"";
+            command = new MySqlCommand(select, polaczenie);
+            reader = command.ExecuteReader();
+            reader.Read();
+            if (has == reader["haslo"].ToString())
+            {
+                polaczenie.Close();
+                return true;
+            }
+            else
+            {
+
+                polaczenie.Close();
+                return false;
+            }
+               
         }
     }
 }

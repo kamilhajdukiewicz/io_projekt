@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace io_projekt_cs
 {
-    class SystemMan : Singleton
+    class SystemMan
     {
+        private static SystemMan _obiekt;
         public Uzytkownik user = new io_projekt_cs.Uzytkownik();
         Koszyk kosz = new Koszyk();
         public int mainpanel()
@@ -19,13 +20,31 @@ namespace io_projekt_cs
             Console.WriteLine("2. Przeglądaj");
             Console.WriteLine("3. Moje konto");
             Console.WriteLine("4. Koszyk");
+            Console.WriteLine("9. Pomoc");
             Console.WriteLine("-------------");
             Console.WriteLine("5. Zarejestruj się");
             Console.WriteLine("6. Zaloguj się");
             int klucz = Convert.ToInt32(Console.ReadLine());
             return klucz;
         }
+        protected SystemMan()
+        {
 
+        }
+        //publiczna metoda statyczna za pomocą której
+        //otzymamy referencję do obiektu
+        public static SystemMan utworzObiekt()
+        {
+            //sprawdzamy czy już utworzyliśmy instancję klasy
+            if (_obiekt == null)
+            {
+                //jeśli nie to ją tworzymy
+                _obiekt = new SystemMan();
+            }
+            //zwracamy instancję obiektu zapisanego
+            //w stacznym polu naszej klasy
+            return _obiekt;
+        }
         public int przegladaj(Baza_danych b)
         {
             Console.Clear();
@@ -38,7 +57,9 @@ namespace io_projekt_cs
                 Console.WriteLine("id [{0}], marka [{1}], model [{2}], rok [{3}], przebieg [{4}km], cena [{5}zl]", i, b.get_marka(i), b.get_model(i), b.get_rok(i), b.get_przebieg(i), b.get_cena(i));
             }
             Console.WriteLine("-------------");
+            Console.WriteLine("Aby posortowac wzgledem ceny wcisnij 80");
             Console.WriteLine("Aby wrocic kliknij 0");
+            Console.WriteLine("Aby wyszukac konkretne auto wcisnij 90");
             Console.WriteLine("Aby dodac ogloszenia kliknij 98");
             Console.WriteLine("Aby dodac ogloszenie do koszyka wcisnij numer ogloszenia");
 
@@ -52,11 +73,30 @@ namespace io_projekt_cs
                 Console.ReadKey();
                 klucz = 0;
             }
-            while (klucz != 0 && klucz != 1)
+            if(klucz==80)
+            {
+                b.sortuj_wzgledem_ceny();
+                Console.WriteLine("-------------");
+                Console.WriteLine("Aby wrocic kliknij 0");
+                Console.WriteLine("Aby dodac ogloszenia kliknij 98");
+                Console.WriteLine("Aby dodac ogloszenie do koszyka wcisnij id ogloszenia");
+                klucz = Convert.ToInt32(Console.ReadLine());
+            }
+            if(klucz==90)
+            {
+                Console.Write("Podaj marke: ");
+                string mar = Console.ReadLine();
+                b.szukaj(mar);
+                Console.WriteLine("-------------");
+                Console.WriteLine("Aby wrocic kliknij 0");
+                Console.WriteLine("Aby dodac ogloszenie do koszyka wcisnij id ogloszenia");
+                klucz = Convert.ToInt32(Console.ReadLine());
+            }
+            while (klucz != 0 )
             {
                 if (user.islogged)
                 {
-                    int id1 = klucz - 1;
+                    int id1 = klucz;
                     kosz.id_pr.Add(id1);
                     string mark = b.get_marka(id1);
                     string mode = b.get_model(id1);
@@ -81,7 +121,7 @@ namespace io_projekt_cs
 
         public int mojekonto()
         {
-            if (user.islogged)
+            if (user.islogged)  
             {
                 Console.Clear();
                 Console.WriteLine("MOJE KONTO");
@@ -92,7 +132,17 @@ namespace io_projekt_cs
                 Console.WriteLine("4. Koszyk");
                 Console.WriteLine("-------------");
                 Console.WriteLine("5. Wyswietl swoje ogloszenia");
+                Console.WriteLine("6. Pokaz moje dane");
+                Console.WriteLine("7. Zmien dane");
                 int klucz = Convert.ToInt32(Console.ReadLine());
+                if(klucz==6)
+                {
+                    klucz=user.pokaz_dane();
+                }
+                else if(klucz==7)
+                {
+                    klucz = user.zmiendane();
+                }
                 return klucz;
             }
             else
@@ -128,7 +178,7 @@ namespace io_projekt_cs
                 return klucz;
             }
 }
-        public int zarejestruj()
+        public int zarejestruj(Baza_danych b)
         {
             Console.Clear();
             Console.Write("Podaj imie: ");
@@ -142,6 +192,7 @@ namespace io_projekt_cs
             Console.Write("Podaj haslo: ");
             string ha = Console.ReadLine();
             user.nowy(im, na, nr, em, ha);
+            b.nowy_user(em, ha);
             Console.WriteLine("--------------------------------");
             Console.WriteLine("Rejestracja przebiegła pomyślnie");
             Console.WriteLine("--------------------------------");
@@ -150,14 +201,14 @@ namespace io_projekt_cs
             return klucz;
         }
 
-        public int zaloguj()
+        public int zaloguj(Baza_danych b)
         {
             Console.Clear();
             Console.Write("Podaj email: ");
             string em = Console.ReadLine();
             Console.Write("Podaj haslo: ");
             string ha = Console.ReadLine();
-            if(em==user.email && ha==user.haslo)
+            if(b.czy_zalogowano(em,ha))
             {
                 Console.WriteLine("Zalogowano poprawnie");
                 user.czy_zalogowano();
@@ -239,6 +290,10 @@ namespace io_projekt_cs
             Console.ReadKey();
             klucz = 0;
             return klucz;
+        }
+        public void nowy_userr(Baza_danych b, string email, string haslo)
+        {
+            b.nowy_user(email, haslo);
         }
     }
 }

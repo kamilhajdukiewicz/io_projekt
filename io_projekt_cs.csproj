@@ -60,9 +60,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auto.cs" />
+    <Compile Include="Auto_ciezarowe.cs" />
     <Compile Include="Baza_danych.cs" />
+    <Compile Include="Builder.cs" />
     <Compile Include="Czesc.cs" />
+    <Compile Include="Dane_Klienta.cs" />
+    <Compile Include="Info_o_zamowieniu.cs" />
     <Compile Include="Koszyk.cs" />
+    <Compile Include="Lista_produktow.cs" />
+    <Compile Include="Lista_zakupow.cs" />
     <Compile Include="Ogloszenie.cs" />
     <Compile Include="Produkt.cs" />
     <Compile Include="Program.cs" />
@@ -70,9 +76,11 @@
     <Compile Include="Singleton.cs" />
     <Compile Include="SystemMan.cs" />
     <Compile Include="Uzytkownik.cs" />
+    <Compile Include="Zamowienie.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
